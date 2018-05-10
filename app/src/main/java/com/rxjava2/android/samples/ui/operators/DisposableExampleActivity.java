@@ -4,17 +4,13 @@ import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
 import com.rxjava2.android.samples.R;
 import com.rxjava2.android.samples.utils.AppConstant;
 
-import java.util.concurrent.Callable;
-
 import io.reactivex.Observable;
-import io.reactivex.ObservableSource;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.observers.DisposableObserver;
@@ -34,15 +30,10 @@ public class DisposableExampleActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_example);
-        btn = (Button) findViewById(R.id.btn);
-        textView = (TextView) findViewById(R.id.textView);
+        btn = findViewById(R.id.btn);
+        textView = findViewById(R.id.textView);
 
-        btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                doSomeWork();
-            }
-        });
+        btn.setOnClickListener(view -> doSomeWork());
     }
 
     @Override
@@ -86,13 +77,10 @@ public class DisposableExampleActivity extends AppCompatActivity {
     }
 
     static Observable<String> sampleObservable() {
-        return Observable.defer(new Callable<ObservableSource<? extends String>>() {
-            @Override
-            public ObservableSource<? extends String> call() throws Exception {
-                // Do some long running operation
-                SystemClock.sleep(2000);
-                return Observable.just("one", "two", "three", "four", "five");
-            }
+        return Observable.defer(() -> {
+            // Do some long running operation
+            SystemClock.sleep(2000);
+            return Observable.just("one", "two", "three", "four", "five");
         });
     }
 }

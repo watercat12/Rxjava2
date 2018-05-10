@@ -3,7 +3,6 @@ package com.rxjava2.android.samples.ui.operators;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -15,6 +14,7 @@ import java.util.concurrent.TimeUnit;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
 
@@ -27,20 +27,15 @@ public class IntervalExampleActivity extends AppCompatActivity {
     Button btn;
     TextView textView;
     private final CompositeDisposable disposables = new CompositeDisposable();
-
+    Disposable disposable;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_example);
-        btn = (Button) findViewById(R.id.btn);
-        textView = (TextView) findViewById(R.id.textView);
+        btn = findViewById(R.id.btn);
+        textView = findViewById(R.id.textView);
 
-        btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                doSomeWork();
-            }
-        });
+        btn.setOnClickListener(view -> doSomeWork());
     }
 
     @Override
@@ -63,7 +58,8 @@ public class IntervalExampleActivity extends AppCompatActivity {
     }
 
     private Observable<? extends Long> getObservable() {
-        return Observable.interval(0, 2, TimeUnit.SECONDS);
+        //3 là thời gian
+        return Observable.interval(3, 2, TimeUnit.SECONDS);
     }
 
     private DisposableObserver<Long> getObserver() {
